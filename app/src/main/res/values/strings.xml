@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Pokedex</string>
     <string name="label_pokemon">Pokemon</string>
+    <string name="label_name_pokemon">Bulbasaur</string>
+    <string name="label_abilities">Abilities</string>
 </resources>
