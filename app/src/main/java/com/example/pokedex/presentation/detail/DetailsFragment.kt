@@ -18,7 +18,8 @@ class DetailsFragment : Fragment() {
     private lateinit var binding: FragmentDetailsBinding
     private val viewModel by viewModels<DetailsViewModel>()
     private var url = ""
-    private lateinit var info: Array<String>
+    private var name = ""
+    private var idPokemon = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,15 +27,14 @@ class DetailsFragment : Fragment() {
     ): View {
         binding = FragmentDetailsBinding.inflate(inflater, container, false)
 
-        info = getData()
-
+        getData()
         initObserver()
 
         return binding.root
     }
 
     private fun initObserver() {
-        viewModel.executeGetInfoPokemon(info[1])
+        viewModel.executeGetInfoPokemon(name)
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
                 State.Loading -> {
@@ -53,17 +53,20 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun getData(): Array<String> {
+    private fun getData() {
         val info = arguments?.getStringArray(Const.key)!!
-        url = Const.urlSpritesPokemon + "${info[0]}.png"
-        return info
+
+        idPokemon = info[0].toInt()
+        name = info[1]
+        url = Const.urlSpritesPokemon + "$idPokemon.png"
+
     }
 
     private fun setInfo(abilities: List<Ability>) {
         binding.tvAbilitiesOne.text = abilities[0].ability.name
         binding.tvAbilitiesTwo.text = abilities[1].ability.name
 
-        binding.tvName.text = info[1]
+        binding.tvName.text = name
         binding.tvAbilities.text = resources.getText(R.string.label_abilities)
 
         Glide.with(requireContext()).load(url).into(binding.ivPokemon)
